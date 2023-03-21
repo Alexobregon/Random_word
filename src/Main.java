@@ -24,6 +24,7 @@ public class Main {
         JButton addButton = new JButton("Add a new word");
         JButton removeButton = new JButton("Remove a word");
         JButton showAllButton = new JButton("Show all words");
+        JButton clearOutputButton = new JButton("Clear Output"); // Added the clear output button
         JTextArea outputArea = new JTextArea();
         outputArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(outputArea);
@@ -34,6 +35,7 @@ public class Main {
         panel.add(addButton);
         panel.add(removeButton);
         panel.add(showAllButton);
+        panel.add(clearOutputButton); // Add the clear output button to the panel
         panel.add(scrollPane);
 
         // Set the layout for the panel
@@ -48,6 +50,7 @@ public class Main {
                         .addComponent(addButton)
                         .addComponent(removeButton)
                         .addComponent(showAllButton)
+                        .addComponent(clearOutputButton) // Add clear output button to the horizontal layout
                         .addComponent(scrollPane)
         );
         layout.setVerticalGroup(
@@ -57,6 +60,7 @@ public class Main {
                         .addComponent(addButton)
                         .addComponent(removeButton)
                         .addComponent(showAllButton)
+                        .addComponent(clearOutputButton) // Add clear output button to the vertical layout
                         .addComponent(scrollPane)
         );
 
@@ -95,7 +99,7 @@ public class Main {
                 String wordToRemove = JOptionPane.showInputDialog("Enter the word to remove:");
                 if (wordToRemove != null) {
                     if (myList.remove(wordToRemove)) {
-                        outputArea.append("Word removed: " + wordToRemove + "\n");
+                        outputArea.append("Word removed: "  + wordToRemove + "\n");
                     } else {
                         outputArea.append("Word not found: " + wordToRemove + "\n");
                     }
@@ -107,9 +111,17 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 outputArea.append("All words:\n");
-                for (String word                 : myList) {
+                for (String word : myList) {
                     outputArea.append(word + "\n");
                 }
+            }
+        });
+
+        // Add action listener for the clear output button
+        clearOutputButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                outputArea.setText(""); // Clear the text in the output area
             }
         });
 
