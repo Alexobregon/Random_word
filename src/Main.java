@@ -1,83 +1,120 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
+import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args) {
+        // Create the main window
+        JFrame frame = new JFrame("Random Word Generator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        // Create the main panel
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        // Create the components
+        JLabel welcomeLabel = new JLabel("Welcome to the random word generator!");
+        JButton generateButton = new JButton("Generate a random word");
+        JButton addButton = new JButton("Add a new word");
+        JButton removeButton = new JButton("Remove a word");
+        JButton showAllButton = new JButton("Show all words");
+        JTextArea outputArea = new JTextArea();
+        outputArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(outputArea);
+
+        // Add the components to the panel
+        panel.add(welcomeLabel);
+        panel.add(generateButton);
+        panel.add(addButton);
+        panel.add(removeButton);
+        panel.add(showAllButton);
+        panel.add(scrollPane);
+
+        // Set the layout for the panel
+        GroupLayout layout = new GroupLayout(panel);
+        panel.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(welcomeLabel)
+                        .addComponent(generateButton)
+                        .addComponent(addButton)
+                        .addComponent(removeButton)
+                        .addComponent(showAllButton)
+                        .addComponent(scrollPane)
+        );
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(welcomeLabel)
+                        .addComponent(generateButton)
+                        .addComponent(addButton)
+                        .addComponent(removeButton)
+                        .addComponent(showAllButton)
+                        .addComponent(scrollPane)
+        );
+
+        // Initialize the list and random generator
         List<String> myList = new ArrayList<>();
         myList.add("A");
         myList.add("B");
         myList.add("C");
         myList.add("D");
         Random r = new Random();
-        Scanner scanner = new Scanner(System.in);
 
-        // Print the welcome message
-        System.out.println("Welcome to the random word generator");
-
-        // Start an infinite loop
-        while (true) {
-            // Print the menu
-            System.out.println("\nMenu:");
-            System.out.println("1. Generate a random word");
-            System.out.println("2. Add a new word");
-            System.out.println("3. Remove a word");
-            System.out.println("4. Show all words");
-            System.out.println("5. Quit");
-            System.out.print("Enter your choice: ");
-
-            // Read user input
-            String input = scanner.nextLine();
-
-            // If the user chose to generate a random word
-            if (input.equals("1")) {
-                // Generate a random integer between 0 (inclusive) and the size of the list (exclusive)
+        // Add action listeners for the buttons
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 int randomItem = r.nextInt(myList.size());
-
-                // Get the element from the list at the index of the randomly generated integer
                 String randomElement = myList.get(randomItem);
+                outputArea.append("Random word: " + randomElement + "\n");
+            }
+        });
 
-                // Print the random element to the console
-                System.out.println("Random word: " + randomElement);
-            }
-            // If the user chose to add a new word
-            else if (input.equals("2")) {
-                System.out.print("Enter the new word: ");
-                String newWord = scanner.nextLine();
-                myList.add(newWord);
-                System.out.println("Word added: " + newWord);
-            }
-            // If the user chose to remove a word
-            else if (input.equals("3")) {
-                System.out.print("Enter the word to remove: ");
-                String wordToRemove = scanner.nextLine();
-                if (myList.remove(wordToRemove)) {
-                    System.out.println("Word removed: " + wordToRemove);
-                } else {
-                    System.out.println("Word not found: " + wordToRemove);
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String newWord = JOptionPane.showInputDialog("Enter the new word:");
+                if (newWord != null && !newWord.trim().isEmpty()) {
+                    myList.add(newWord);
+                    outputArea.append("Word added: " + newWord + "\n");
                 }
             }
-            else if (input.equals("4")) {
-                System.out.println("All words:" );
-                for(String word : myList){
-                    System.out.println(word);
+        });
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String wordToRemove = JOptionPane.showInputDialog("Enter the word to remove:");
+                if (wordToRemove != null) {
+                    if (myList.remove(wordToRemove)) {
+                        outputArea.append("Word removed: " + wordToRemove + "\n");
+                    } else {
+                        outputArea.append("Word not found: " + wordToRemove + "\n");
+                    }
                 }
             }
-            // If the user chose to quit
-            else if (input.equals("5")) {
-                break;
-            }
-            // If the user entered an invalid choice
-            else {
-                System.out.println("Invalid choice. Please try again.");
-            }
-        }
+        });
 
-        // Close the scanner
-        scanner.close();
+        showAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                outputArea.append("All words:\n");
+                for (String word                 : myList) {
+                    outputArea.append(word + "\n");
+                }
+            }
+        });
 
-        System.out.println("Goodbye!");
+        // Show the main window
+        frame.setVisible(true);
     }
 }
+
